@@ -1,38 +1,40 @@
+
 import { useState } from 'react'
 import { validateUrl } from '../utils/validateUrl'
+import ColdStartNotice from './ColdStartNotice'
 
 function URLForm({ onAnalyze }) {
   const [url, setUrl] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [slowConnection, setSlowConnection] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    console.log('1. Se presionó el botón')
-    console.log('2. URL:', url)
-
     const trimmedUrl = url.trim()
 
     if (!validateUrl(trimmedUrl)) {
-      console.log('3. URL inválida')
       setError('Ingresa una URL válida para analizar.')
       return
     }
 
-    console.log('3. URL válida')
-
     setError('')
+    setSlowConnection(false)
     setLoading(true)
 
     try {
-      await onAnalyze(trimmedUrl)
-      console.log('4. onAnalyze ejecutado')
-    } catch (error) {
-      console.error('Error:', error)
-      setError('No fue posible analizar la URL. Inténtalo nuevamente.')
+      await onAnalyze(trimmedUrl, {
+        onSlow: () => setSlowConnection(true),
+      })
+    } catch (requestError) {
+      setError(
+        requestError.message ||
+          'No fue posible analizar la URL. Inténtalo nuevamente.',
+      )
     } finally {
       setLoading(false)
+      setSlowConnection(false)
     }
   }
 
@@ -69,12 +71,13 @@ function URLForm({ onAnalyze }) {
           aria-label="URL para analizar"
           aria-invalid={Boolean(error)}
           disabled={loading}
-          autoComplete="off"
+          autoComplete="url"
+          maxLength={4096}
         />
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || !url.trim() || !validateUrl(url)}
         >
           {loading ? 'Analizando...' : 'Analizar URL'}
 
@@ -87,6 +90,8 @@ function URLForm({ onAnalyze }) {
           {error}
         </p>
       )}
+
+      {loading && slowConnection && <ColdStartNotice />}
     </form>
   )
 }
