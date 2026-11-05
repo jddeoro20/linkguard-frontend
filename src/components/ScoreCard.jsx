@@ -1,9 +1,7 @@
 
 import RiskGauge from './RiskGauge'
 
-function ScoreCard({
-  result,
-}) {
+function ScoreCard({ result }) {
   if (!result) return null
 
   const {
@@ -30,6 +28,7 @@ function ScoreCard({
   const formatReputationStatus = (status) => {
     const statuses = {
       available: 'Disponible',
+      cached: 'Resultado en caché',
       unavailable: 'No disponible',
       timeout: 'Tiempo de espera agotado',
     }
@@ -60,10 +59,7 @@ function ScoreCard({
         </div>
       </div>
 
-      <RiskGauge
-        score={score}
-        riskLevel={risk_level}
-      />
+      <RiskGauge score={score} riskLevel={risk_level} />
 
       <div className="score-card-details">
         <div className="score-detail">
