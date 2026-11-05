@@ -95,19 +95,15 @@ La aplicación está configurada para el despliegue continuo (CD) automático a 
 1. **Conexión de Repositorio**: Conectado a la rama  del repositorio .
 2. **Build Settings en Vercel**:
    * **Framework Preset**: Vite
-   * **Build Command**:  (o )
-   * **Output Directory**: 
 3. **Environment Variables en Vercel**:
    * Add Environment Variable:
-     * **Key**: 
      * **Value**: URL pública de Render
 
 ---
 
 ## Integración con el Ecosistema
 
-* **Backend Repository**: 
-* **Especificación de Arquitectura**: Compliant con SDD (Specification-Driven Development).
+* **Backend**: https://github.com/VeleZ-z/linkguard-backend ; https://linkguard-backend-a30k.onrender.com
 
 ---
 
